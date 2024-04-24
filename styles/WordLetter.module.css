@@ -1,0 +1,10 @@
+.letterBox {
+    border-bottom: 2px solid black;
+    margin: 20px;
+    width: 25px;
+}
+
+.letter {
+    font-size: 35px;
+    opacity:0;
+}
