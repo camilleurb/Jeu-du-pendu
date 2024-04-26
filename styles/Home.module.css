@@ -48,3 +48,7 @@
 .wordContainer {
   display: flex;
 }
+
+.modal {
+  font-size: larger;
+}
