@@ -10,15 +10,22 @@ function Home() {
   const [randomLetters, setRandomLetters] = useState([]); 
   const [launched, setLaunched] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [wordToGuess, setWordToGuess] = useState ('');
+  const [isGameWon, setIsGameWon] = useState(false); 
+  const [wordToGuess, setWordToGuess] = useState('');
 
-  useEffect(()=>{
+  useEffect(() => {
     fetch('https://trouve-mot.fr/api/sizemax/7')
-    .then(response=>response.json())
-    .then(data => {
-      setWordToGuess(data[0].name)
-    })
+      .then(response => response.json())
+      .then(data => {
+        setWordToGuess(data[0].name)
+      })
   }, []);
+
+  useEffect(() => {
+    if (isGameWon) {
+      setIsModalOpen(false);
+    }
+  }, [isGameWon]);
 
   const keyboardLetters = [
     'a','z','e','r','t','y','u','i','o','p','q','s','d','f','g','h','j','k','l','m','w','x','c','v','b','n'
@@ -34,9 +41,24 @@ function Home() {
     setLaunched(true);
   };
 
+  const gameWinned = () => {
+    const allLettersFound = randomLetters.every(item => item.found === true);
+    if (allLettersFound) {
+      setIsGameWon(true);
+    }
+  };
+
+  useEffect(() => {
+    gameWinned();
+  }, [randomLetters]);
 
   const checkLetter = (letter) => {
-    setLettersTried(prevLetter => prevLetter + ' ' + letter);
+    const isLetterInWord = randomLetters.some(item => item.letter === letter);
+    if (!isLetterInWord) {
+      setTentative(prevTentative => prevTentative - 1);
+      setLettersTried(prevLetter => prevLetter + ' ' + letter);
+    };
+    
     const updatedLetters = randomLetters.map(item => {
       if (item.letter === letter) {
         return { ...item, found: true };
@@ -45,23 +67,21 @@ function Home() {
       }
     });
     setRandomLetters(updatedLetters);
-    setTentative(tentative - 1);
-    
   };
-
 
   const newGame = () => {
     if (tentative === 0) {
-      setTimeout(()=>{
+      setTimeout(() => {
         setIsModalOpen(true);
-      },1000)
-    }
+      }, 1000)
+    } 
   };
 
   newGame();
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+    setIsGameWon(false); 
     setLaunched(false);
     setLettersTried([]);
     setTentative(9);
@@ -89,7 +109,7 @@ function Home() {
         <Modal 
           title="C'est perdu :("
           className={styles.modal}
-          visible={isModalOpen}
+          open={isModalOpen}
           onCancel={handleModalClose}
           footer={[
             <Button key="playAgain!" onClick={handleModalClose}>Rejouer</Button>
@@ -97,12 +117,23 @@ function Home() {
         >
           Le mot était : {wordToDisplay.join('')}
         </Modal>
-        {launched && <div className={styles.pendu}>Nombre de tentative : {tentative}</div>}
+        <Modal 
+          title="C'est gagné ! :)"
+          className={styles.modal}
+          open={isGameWon}
+          onCancel={handleModalClose}
+          footer={[
+            <Button key="playAgain!" onClick={handleModalClose}>Rejouer</Button>
+          ]}
+        >
+          Bien joué(e) champion(ne)
+        </Modal>
+        {launched && <div className={styles.pendu}>Tentative(s) restante(s) : {tentative}</div>}
         <div className={styles.wordContainer}>
-          {!launched && <button className={styles.launchBtn} onClick={startGame}>Let's Play</button>}
+          {!launched && <button className={styles.launchBtn} onClick={startGame}>Jouons!</button>}
           {launched && letters}
         </div>
-        {launched && <p>Lettres utilisées : {lettersTried}</p>}
+        {launched && <p className={styles.triedLetters}>Lettres utilisées : {lettersTried}</p>}
         {launched && <div className={styles.keyboardContainer}>{keyboard}</div>}
       </main>
     </div>

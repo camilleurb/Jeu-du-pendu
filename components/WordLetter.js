@@ -12,4 +12,4 @@ function WordLetter(props) {
  );
 }
 
-export default WordLetter;
+export default WordLetter; 
