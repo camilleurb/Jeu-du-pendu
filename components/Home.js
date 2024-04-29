@@ -19,13 +19,7 @@ function Home() {
       .then(data => {
         setWordToGuess(data[0].name)
       })
-  }, []);
-
-  useEffect(() => {
-    if (isGameWon) {
-      setIsModalOpen(false);
-    }
-  }, [isGameWon]);
+  }, [isModalOpen, isGameWon]);
 
   const keyboardLetters = [
     'a','z','e','r','t','y','u','i','o','p','q','s','d','f','g','h','j','k','l','m','w','x','c','v','b','n'
@@ -45,13 +39,14 @@ function Home() {
     const allLettersFound = randomLetters.every(item => item.found === true);
     if (allLettersFound) {
       setIsGameWon(true);
+      setIsModalOpen(true);
     }
   };
 
   useEffect(() => {
     gameWinned();
   }, [randomLetters]);
-
+  
   const checkLetter = (letter) => {
     const isLetterInWord = randomLetters.some(item => item.letter === letter);
     if (!isLetterInWord) {
@@ -89,7 +84,7 @@ function Home() {
 
   const disabled = tentative === 0;
   const keyboard = keyboardLetters.map((letter, i) => (
-    <KeyboardLetter key={i} letter={letter} checkLetter={checkLetter} disabled={disabled}/>
+    <KeyboardLetter key={i} letter={letter.toUpperCase()} checkLetter={checkLetter} disabled={disabled}/>
   ));
 
   const letters = randomLetters.map((item, index) => {
