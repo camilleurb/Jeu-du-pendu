@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+
 .letter {
-    background-color: black;
+    font-family: 'Poetsen One';
+    background-color: #3B413C;
     color: white;
-    border: none;
+    border: #9DB5B2 3px solid;
     border-radius: 50%;
     font-size: 30px;
     width: 50px;
@@ -11,4 +14,10 @@
     align-items: center;
     cursor: pointer;
     height: 50px;
+    padding-bottom: 6px;
+}
+
+.letter:hover {
+    font-size: 37px;
+    color: #9DB5B2;
 }
