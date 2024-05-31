@@ -92,7 +92,7 @@ function Home() {
 
   const disabled = tentative === 0;
   const keyboard = keyboardLetters.map((letter, i) => (
-    <KeyboardLetter key={i} letter={letter} checkLetter={checkLetter} disabled={disabled}/>
+    <KeyboardLetter key={i} letter={letter} checkLetter={checkLetter} disabled={lettersTried.includes(letter) || disabled}/>
   ));
 
   const letters = randomLetters.map((item, index) => {
