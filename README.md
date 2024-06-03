@@ -71,7 +71,7 @@ Les contributions sont les bienvenues ! Si vous avez des suggestions ou des amé
 5. Ouvrez une Pull Request.
 
 ## Auteur
-- **Camille Urbain** - [GitHub](https://github.com/camilleurb)
+- **Camille Urbaniak** - [GitHub](https://github.com/camilleurb)
 
 ## Licence
 Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
